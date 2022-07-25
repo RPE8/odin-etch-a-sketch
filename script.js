@@ -19,6 +19,12 @@ colorPicker.addEventListener("change", (event) => {
   color = selectedColor;
 });
 
+const clearButton = document.getElementById("clear");
+
+clearButton.addEventListener("click", () => {
+  ctx.clearRect(0, 0, ctx_rect.width, ctx_rect.height);
+});
+
 attachTouchStart(canvas);
 attachTouchEnd(canvas);
 attachTouchMove(canvas);
