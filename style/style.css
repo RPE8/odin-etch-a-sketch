@@ -30,3 +30,14 @@ canvas {
   width: 90vw;
   background-color: rgb(204, 198, 198);
 }
+
+.labeled-input {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.labeled-input > input {
+  width: 100%;
+  /* text-align: center; */
+}
