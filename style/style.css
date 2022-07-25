@@ -25,9 +25,11 @@ main {
   background-color: rgb(111, 167, 148);
 }
 
-canvas {
+#canvas-container {
   min-height: 80vh;
   width: 90vw;
+}
+canvas {
   background-color: rgb(204, 198, 198);
   touch-action: none;
 }
