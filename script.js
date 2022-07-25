@@ -7,9 +7,9 @@ canvasContainer.appendChild(canvas);
 const ctx = canvas.getContext("2d"),
   ctx_rect = ctx.canvas.getBoundingClientRect();
 
-let touchStart = attachTouchStart(canvas);
-let touchEnd = attachTouchEnd(canvas);
-let toucheMove = attachTouchMove(canvas);
+attachTouchStart(canvas);
+attachTouchEnd(canvas);
+attachTouchMove(canvas);
 let currentPos = {};
 
 function attachTouchStart(element) {
@@ -25,7 +25,7 @@ function attachTouchStart(element) {
     currentPos.y = mainTouch.clientY - ctx_rect.top;
   };
 
-  canvas.addEventListener("touchstart", handleTouchStart);
+  element.addEventListener("touchstart", handleTouchStart);
 
   return touch;
 }
@@ -47,7 +47,7 @@ function attachTouchEnd(element) {
     }
   };
 
-  canvas.addEventListener("touchend", handleTouchEnd);
+  element.addEventListener("touchend", handleTouchEnd);
 
   return touch;
 }
@@ -72,7 +72,7 @@ function attachTouchMove(element) {
     currentPos.y = y;
   };
 
-  canvas.addEventListener("touchmove", handleTouchMove);
+  element.addEventListener("touchmove", handleTouchMove);
 
   return touchMove;
 }
