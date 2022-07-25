@@ -33,14 +33,22 @@ canvas {
 
 #tools-menu {
   list-style: none;
+  margin: 10px;
+}
+
+#tools-menu button,
+.labeled-input > input {
+  width: 100%;
+  height: 35px;
+}
+
+#tools-menu > li {
+  margin-bottom: 12px;
+  display: flex;
+  justify-content: center;
 }
 
 .labeled-input {
-  display: flex;
   flex-direction: column;
   align-items: center;
-}
-
-.labeled-input > input {
-  width: 100%;
 }
