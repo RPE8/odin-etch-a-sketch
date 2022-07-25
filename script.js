@@ -4,8 +4,20 @@ const canvas = document.createElement("canvas");
 canvas.height = canvasContainer.offsetHeight;
 canvas.width = canvasContainer.offsetWidth;
 canvasContainer.appendChild(canvas);
+
+let color = "#FF0000";
+// let opacity = 0.1;
+
 const ctx = canvas.getContext("2d"),
   ctx_rect = ctx.canvas.getBoundingClientRect();
+
+const colorPicker = document.getElementById("color");
+
+colorPicker.addEventListener("change", (event) => {
+  const selectedColor = event.target.value;
+  colorPicker.setAttribute("value", selectedColor);
+  color = selectedColor;
+});
 
 attachTouchStart(canvas);
 attachTouchEnd(canvas);
@@ -80,6 +92,9 @@ function attachTouchMove(element) {
 function draw(oldX, oldY, newX, newY) {
   ctx.lineWidth = 5;
   ctx.lineCap = "round";
+
+  // ctx.globalAlpha = opacity;
+  ctx.strokeStyle = color;
 
   ctx.beginPath();
   ctx.moveTo(oldX, oldY);
