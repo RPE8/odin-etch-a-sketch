@@ -9,9 +9,20 @@
     <title>Etch-a-Sketch</title>
   </head>
   <body>
+    <header>
+      <h1>Etch-a-Sketch</h1>
+    </header>
     <main id="main-content">
-      <section id="draw-panel"></section>
-      <section id="draw-tools"></section>
+      <section id="draw-panel"><canvas></canvas></section>
+      <section id="draw-tools">
+        <menu>
+          <li><span>Color:</span><input type="color" /></li>
+          <li><span>Opacity:</span><input type="range" value="100" /></li>
+          <li><button type="button">Undo</button></li>
+          <li><button type="button">Redo</button></li>
+          <li><button type="button">Clear</button></li>
+        </menu>
+      </section>
     </main>
   </body>
 </html>
