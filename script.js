@@ -1,4 +1,3 @@
-console.log("test)=");
 const canvasContainer = document.getElementById("canvas-container");
 
 const canvas = document.createElement("canvas");
@@ -39,6 +38,13 @@ function attachTouchEnd(element) {
   const handleTouchEnd = (event) => {
     console.log("TouchEnd");
     touch.touches = event.touches;
+    const mainTouch = event.changedTouches[0];
+    if (
+      currentPos.x === mainTouch.clientX - ctx_rect.left &&
+      currentPos.y === mainTouch.clientY - ctx_rect.top
+    ) {
+      draw(currentPos.x, currentPos.y, currentPos.x, currentPos.y);
+    }
   };
 
   canvas.addEventListener("touchend", handleTouchEnd);
@@ -47,31 +53,36 @@ function attachTouchEnd(element) {
 }
 
 function attachTouchMove(element) {
-  const touch = {
+  const touchMove = {
     touches: null,
+    x: null,
+    y: null,
   };
 
   const handleTouchMove = (event) => {
     console.log("TouchMove");
-    touch.touches = event.touches;
+    touchMove.touches = event.touches;
     const mainTouch = event.touches[0];
+    const x = mainTouch.clientX - ctx_rect.left;
+    const y = mainTouch.clientY - ctx_rect.top;
 
-    draw(mainTouch.clientX, mainTouch.clientY);
+    draw(currentPos.x, currentPos.y, x, y);
+
+    currentPos.x = x;
+    currentPos.y = y;
   };
 
   canvas.addEventListener("touchmove", handleTouchMove);
 
-  return touch;
+  return touchMove;
 }
 
-function draw(x, y) {
+function draw(oldX, oldY, newX, newY) {
   ctx.lineWidth = 5;
   ctx.lineCap = "round";
 
   ctx.beginPath();
-  ctx.moveTo(currentPos.x, currentPos.y);
-  currentPos.x = x - ctx_rect.left;
-  currentPos.y = y - ctx_rect.top;
-  ctx.lineTo(currentPos.x, currentPos.y);
+  ctx.moveTo(oldX, oldY);
+  ctx.lineTo(newX, newY);
   ctx.stroke();
 }
