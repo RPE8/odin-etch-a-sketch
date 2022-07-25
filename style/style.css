@@ -31,6 +31,10 @@ canvas {
   background-color: rgb(204, 198, 198);
 }
 
+#tools-menu {
+  list-style: none;
+}
+
 .labeled-input {
   display: flex;
   flex-direction: column;
@@ -39,5 +43,4 @@ canvas {
 
 .labeled-input > input {
   width: 100%;
-  /* text-align: center; */
 }
