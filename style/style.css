@@ -29,6 +29,7 @@ canvas {
   min-height: 80vh;
   width: 90vw;
   background-color: rgb(204, 198, 198);
+  touch-action: none;
 }
 
 #tools-menu {
