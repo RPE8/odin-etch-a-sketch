@@ -1,4 +1,4 @@
-import State from "./state.js";
+import State from "./state/state.js";
 
 const canvasContainer = document.getElementById("canvas-container");
 const canvas = document.createElement("canvas");
@@ -7,15 +7,11 @@ canvas.width = canvasContainer.offsetWidth;
 canvasContainer.appendChild(canvas);
 
 let color = "#FF0000";
-let thickness = 5;
-let backgroundColor = "#808080";
+let thickness = 1;
 
 let state = State.generateEmpty({
   color,
   thickness,
-  backgroundColor,
-  width: canvas.width,
-  height: canvas.height,
 });
 
 console.log(state);
@@ -108,8 +104,8 @@ function attachTouchMove(element) {
 }
 
 function draw(oldX, oldY, newX, newY) {
-  ctx.lineWidth = 5;
-  ctx.lineCap = "round";
+  ctx.lineWidth = 2;
+  ctx.lineCap = "but";
 
   // ctx.globalAlpha = opacity;
   ctx.strokeStyle = color;
