@@ -1,4 +1,5 @@
-import State from "./state/state.js";
+import Line from "./line.js";
+import State from "./state.js";
 
 const canvasContainer = document.getElementById("canvas-container");
 const canvas = document.createElement("canvas");
@@ -6,34 +7,39 @@ canvas.height = canvasContainer.offsetHeight;
 canvas.width = canvasContainer.offsetWidth;
 canvasContainer.appendChild(canvas);
 
-let color = "#FF0000";
-let thickness = 1;
+const ctx = canvas.getContext("2d");
+const ctx_rect = canvas.getBoundingClientRect();
+
+const INITIAL_COLOR = "#FF0000";
+const INITIAL_THICKNESS = 1;
 
 let state = State.generateEmpty({
-  color,
-  thickness,
+  color: INITIAL_COLOR,
+  thickness: INITIAL_THICKNESS,
 });
 
-console.log(state);
+function getOffsetX(x) {
+  return x - ctx_rect.left;
+}
 
-const ctx = canvas.getContext("2d"),
-  ctx_rect = ctx.canvas.getBoundingClientRect();
+function getOffsetY(y) {
+  return y - ctx_rect.top;
+}
 
-const colorPicker = document.getElementById("color");
-
-colorPicker.addEventListener("change", (event) => {
+const colorButton = document.getElementById("color");
+colorButton.setAttribute("value", state.color);
+document.getElementById("color").addEventListener("change", (event) => {
   const selectedColor = event.target.value;
-  colorPicker.setAttribute("value", selectedColor);
-  color = selectedColor;
+  colorButton.setAttribute("value", selectedColor);
+  state = state.setColor(selectedColor);
 });
 
 const clearButton = document.getElementById("clear");
-
 clearButton.addEventListener("click", () => {
   ctx.clearRect(0, 0, ctx_rect.width, ctx_rect.height);
 });
 
-attachTouchStart(canvas);
+const startTouch = attachTouchStart(canvas);
 attachTouchEnd(canvas);
 attachTouchMove(canvas);
 let currentPos = {};
@@ -41,14 +47,20 @@ let currentPos = {};
 function attachTouchStart(element) {
   const touch = {
     touches: null,
+    line: null,
   };
 
   const handleTouchStart = (event) => {
-    console.log("TouchStart");
     touch.touches = event.touches;
     const mainTouch = event.touches[0];
-    currentPos.x = mainTouch.clientX - ctx_rect.left;
-    currentPos.y = mainTouch.clientY - ctx_rect.top;
+
+    currentPos.x = getOffsetX(mainTouch.clientX);
+    currentPos.y = getOffsetY(mainTouch.clientY);
+
+    touch.line = new Line({
+      color: state.color,
+      thickness: state.thickness,
+    });
   };
 
   element.addEventListener("touchstart", handleTouchStart);
@@ -64,13 +76,18 @@ function attachTouchEnd(element) {
   const handleTouchEnd = (event) => {
     console.log("TouchEnd");
     touch.touches = event.touches;
-    const mainTouch = event.changedTouches[0];
-    if (
-      currentPos.x === mainTouch.clientX - ctx_rect.left &&
-      currentPos.y === mainTouch.clientY - ctx_rect.top
-    ) {
-      draw(currentPos.x, currentPos.y, currentPos.x, currentPos.y);
+    const line = startTouch.line;
+    if (line.points.length) {
+      line.addPoint({
+        xStart: currentPos.x,
+        yStart: currentPos.y,
+        xEnd: currentPos.x,
+        yEnd: currentPos.y,
+      });
+      line.drawLastPoint(ctx);
+      state = state.addToStack(line);
     }
+    console.log(state);
   };
 
   element.addEventListener("touchend", handleTouchEnd);
@@ -89,10 +106,19 @@ function attachTouchMove(element) {
     console.log("TouchMove");
     touchMove.touches = event.touches;
     const mainTouch = event.touches[0];
-    const x = mainTouch.clientX - ctx_rect.left;
-    const y = mainTouch.clientY - ctx_rect.top;
+    const x = getOffsetX(mainTouch.clientX);
+    const y = getOffsetY(mainTouch.clientY);
 
-    draw(currentPos.x, currentPos.y, x, y);
+    const line = startTouch.line;
+
+    line.addPoint({
+      xStart: currentPos.x,
+      yStart: currentPos.y,
+      xEnd: x,
+      yEnd: y,
+    });
+
+    line.drawLastPoint(ctx);
 
     currentPos.x = x;
     currentPos.y = y;
@@ -101,17 +127,4 @@ function attachTouchMove(element) {
   element.addEventListener("touchmove", handleTouchMove);
 
   return touchMove;
-}
-
-function draw(oldX, oldY, newX, newY) {
-  ctx.lineWidth = 2;
-  ctx.lineCap = "but";
-
-  // ctx.globalAlpha = opacity;
-  ctx.strokeStyle = color;
-
-  ctx.beginPath();
-  ctx.moveTo(oldX, oldY);
-  ctx.lineTo(newX, newY);
-  ctx.stroke();
 }
