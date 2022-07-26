@@ -39,6 +39,15 @@ clearButton.addEventListener("click", () => {
   ctx.clearRect(0, 0, ctx_rect.width, ctx_rect.height);
 });
 
+const undoButton = document.getElementById("undo");
+undoButton.addEventListener("click", () => {
+  state = state.removeLastFromStack();
+  ctx.clearRect(0, 0, ctx_rect.width, ctx_rect.height);
+  state.stack.forEach((action) => {
+    action.draw(ctx);
+  });
+});
+
 const startTouch = attachTouchStart(canvas);
 attachTouchEnd(canvas);
 attachTouchMove(canvas);
