@@ -40,6 +40,7 @@ canvas {
 }
 
 #tools-menu button,
+#tools-menu input,
 .labeled-input > input {
   width: 100%;
   height: 35px;
