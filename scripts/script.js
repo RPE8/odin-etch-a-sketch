@@ -1,3 +1,7 @@
+import State from "./state.js";
+
+console.log(State);
+
 const canvasContainer = document.getElementById("canvas-container");
 
 const canvas = document.createElement("canvas");
