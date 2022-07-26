@@ -1,16 +1,24 @@
 import State from "./state.js";
 
-console.log(State);
-
 const canvasContainer = document.getElementById("canvas-container");
-
 const canvas = document.createElement("canvas");
 canvas.height = canvasContainer.offsetHeight;
 canvas.width = canvasContainer.offsetWidth;
 canvasContainer.appendChild(canvas);
 
 let color = "#FF0000";
-// let opacity = 0.1;
+let thickness = 5;
+let backgroundColor = "#808080";
+
+let state = State.generateEmpty({
+  color,
+  thickness,
+  backgroundColor,
+  width: canvas.width,
+  height: canvas.height,
+});
+
+console.log(state);
 
 const ctx = canvas.getContext("2d"),
   ctx_rect = ctx.canvas.getBoundingClientRect();
