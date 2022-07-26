@@ -1,8 +1,9 @@
 class State {
-  constructor({ stack, color, thickness }) {
+  constructor({ stack = [], redoStack = [], color, thickness }) {
     this.color = color;
     this.thickness = thickness;
     this.stack = stack;
+    this.redoStack = redoStack;
   }
 
   static generateEmpty({ color, thickness }) {
@@ -10,6 +11,7 @@ class State {
       color,
       thickness,
       stack: [],
+      redoStack: [],
     });
   }
 
@@ -20,15 +22,33 @@ class State {
       stack: stackCopy,
       color: this.color,
       thickness: this.thickness,
+      redoStack: [],
     });
   }
 
   removeLastFromStack() {
+    if (!this.stack.length) {
+      return this;
+    }
     const stackCopy = this.stack.slice(0, this.stack.length - 1);
     return new State({
       stack: stackCopy,
       color: this.color,
       thickness: this.thickness,
+      redoStack: [...this.redoStack, this.stack[this.stack.length - 1]],
+    });
+  }
+
+  removeLastFromRedoStack() {
+    if (!this.redoStack.length) {
+      return this;
+    }
+    const redoStackCopy = this.redoStack.slice(0, this.redoStack.length - 1);
+    return new State({
+      stack: [...this.stack, this.redoStack[this.redoStack.length - 1]],
+      color: this.color,
+      thickness: this.thickness,
+      redoStack: redoStackCopy,
     });
   }
 
