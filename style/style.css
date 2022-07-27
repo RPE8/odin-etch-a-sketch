@@ -11,6 +11,7 @@ body {
   justify-content: center;
   align-items: center;
   background-color: rgb(235, 235, 207);
+  padding: 10px;
 }
 
 header {
@@ -19,8 +20,19 @@ header {
 
 main {
   display: flex;
+  height: calc(100% - 40px);
+  width: 100%;
   flex-direction: column;
   background-color: rgb(111, 167, 148);
+}
+
+#draw-panel {
+  flex: 1 1 0;
+}
+
+#draw-tools {
+  overflow-y: hidden;
+  max-height: 80px;
 }
 
 #canvas-container {
@@ -66,4 +78,27 @@ canvas {
   display: flex;
   align-items: center;
   width: 100%;
+}
+
+@media (min-width: 1024px) {
+  main {
+    flex-direction: row-reverse;
+    width: 100%;
+    max-width: 900px;
+  }
+
+  #draw-panel {
+    max-width: 725px;
+  }
+
+  #draw-tools {
+    overflow-y: auto;
+    max-height: 100%;
+  }
+
+  #tools-menu {
+    width: 175px;
+    gap: 20px;
+    flex-direction: column;
+  }
 }

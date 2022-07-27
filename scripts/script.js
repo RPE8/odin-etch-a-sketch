@@ -1,7 +1,7 @@
 import Line from "./line.js";
 import State from "./state.js";
 
-const canvasContainer = document.getElementById("canvas-container");
+const canvasContainer = document.getElementById("draw-panel");
 const canvas = document.createElement("canvas");
 canvasContainer.appendChild(canvas);
 
@@ -47,21 +47,24 @@ function throttle(fn, time) {
   };
 }
 
-const canvasObserver = new ResizeObserver(
+const resizeObserver = new ResizeObserver(
   throttle((entries) => {
+    // setTimeout(() => {
     const { contentRect } = entries[0];
     // Without - 5 container will grow infinitly, probably, because of 'vh' in it's height
-    canvas.height = contentRect.height - 5;
-    canvas.width = contentRect.width;
+    canvas.height =
+      window.innerWidth > 1024 ? contentRect.height : contentRect.height - 80;
+    canvas.width = canvasContainer.clientWidth;
     updateCanvasOffsets();
     state.stack.forEach((action) => {
       action.draw(ctx);
     });
-  }, 25)
+    // }, 0);
+  }, 1)
 );
 
 // Observe one or multiple elements
-canvasObserver.observe(canvasContainer);
+resizeObserver.observe(document.getElementById("main-content"));
 
 window.addEventListener(
   "scroll",
