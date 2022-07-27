@@ -26,7 +26,19 @@ class State {
     });
   }
 
-  removeLastFromStack() {
+  addToRedoStack(action) {
+    const redoStackCopy = [...this.redoStack];
+    const stackCopy = [...this.stack];
+    redoStackCopy.push(action);
+    return new State({
+      stack: stackCopy,
+      color: this.color,
+      thickness: this.thickness,
+      redoStack: redoStackCopy,
+    });
+  }
+
+  moveLastActionFromStackToRedoStack() {
     if (!this.stack.length) {
       return this;
     }
@@ -39,7 +51,7 @@ class State {
     });
   }
 
-  removeLastFromRedoStack() {
+  moveLastActionFromRedoStackToStack() {
     if (!this.redoStack.length) {
       return this;
     }
