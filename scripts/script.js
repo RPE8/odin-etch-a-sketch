@@ -35,14 +35,25 @@ function debounce(fn, time) {
   };
 }
 
+function throttle(fn, time) {
+  let timer;
+
+  return (...args) => {
+    let timeSinceLastExecution = Date.now() - timer;
+    if (!timer || timeSinceLastExecution >= time) {
+      fn.apply(this, args);
+      timer = Date.now();
+    }
+  };
+}
+
 const canvasObserver = new ResizeObserver(
-  debounce((entries) => {
+  throttle((entries) => {
     const { contentRect } = entries[0];
     // Without - 5 container will grow infinitly, probably, because of 'vh' in it's height
     canvas.height = contentRect.height - 5;
     canvas.width = contentRect.width;
-  }),
-  100
+  }, 25)
 );
 
 // Observe one or multiple elements
@@ -52,8 +63,7 @@ window.addEventListener(
   "scroll",
   debounce(() => {
     ctx_rect = canvas.getBoundingClientRect();
-  }),
-  200
+  }, 100)
 );
 
 const colorButton = document.getElementById("color");
