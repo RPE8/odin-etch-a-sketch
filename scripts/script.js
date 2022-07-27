@@ -53,6 +53,9 @@ const canvasObserver = new ResizeObserver(
     // Without - 5 container will grow infinitly, probably, because of 'vh' in it's height
     canvas.height = contentRect.height - 5;
     canvas.width = contentRect.width;
+    state.stack.forEach((action) => {
+      action.draw(ctx);
+    });
   }, 25)
 );
 
