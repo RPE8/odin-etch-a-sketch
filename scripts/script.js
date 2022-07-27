@@ -8,7 +8,7 @@ canvas.width = canvasContainer.offsetWidth;
 canvasContainer.appendChild(canvas);
 
 const ctx = canvas.getContext("2d");
-const ctx_rect = canvas.getBoundingClientRect();
+let ctx_rect = canvas.getBoundingClientRect();
 
 const INITIAL_COLOR = "#FF0000";
 const INITIAL_THICKNESS = 5;
@@ -25,6 +25,25 @@ function getOffsetX(x) {
 function getOffsetY(y) {
   return y - ctx_rect.top;
 }
+
+function debounce(fn, time) {
+  let timer;
+
+  return (...args) => {
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      fn.apply(this, args);
+    }, time);
+  };
+}
+
+window.addEventListener(
+  "scroll",
+  debounce(() => {
+    ctx_rect = canvas.getBoundingClientRect();
+  }),
+  200
+);
 
 const colorButton = document.getElementById("color");
 colorButton.setAttribute("value", state.color);
