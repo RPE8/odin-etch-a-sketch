@@ -11,7 +11,7 @@ const ctx = canvas.getContext("2d");
 const ctx_rect = canvas.getBoundingClientRect();
 
 const INITIAL_COLOR = "#FF0000";
-const INITIAL_THICKNESS = 1;
+const INITIAL_THICKNESS = 5;
 
 let state = State.generateEmpty({
   color: INITIAL_COLOR,
@@ -32,6 +32,14 @@ document.getElementById("color").addEventListener("change", (event) => {
   const selectedColor = event.target.value;
   colorButton.setAttribute("value", selectedColor);
   state = state.setColor(selectedColor);
+});
+
+const thicknessRange = document.getElementById("range");
+thicknessRange.setAttribute("value", state.thickness);
+thicknessRange.addEventListener("change", (event) => {
+  const selectedTchickness = +event.target.value;
+  thicknessRange.setAttribute("value", selectedTchickness);
+  state = state.setThickness(selectedTchickness);
 });
 
 const clearButton = document.getElementById("clear");
