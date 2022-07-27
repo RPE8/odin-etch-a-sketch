@@ -119,9 +119,41 @@ function updateCanvasOffsets() {
 }
 
 const startTouch = attachTouchStart(canvas);
+const mouseDown = attachMouseDown(canvas);
 attachTouchEnd(canvas);
+attachMouseUp(canvas);
 attachTouchMove(canvas);
+attachMouseMove(canvas);
 let currentPos = {};
+
+function attachMouseDown(element) {
+  const down = {
+    down: null,
+    line: null,
+  };
+
+  const handleMouseDown = (event) => {
+    if (event.button !== 0) {
+      return;
+    }
+
+    console.log("down");
+
+    down.down = true;
+
+    currentPos.x = getOffsetX(event.clientX);
+    currentPos.y = getOffsetY(event.clientY);
+
+    down.line = new Line({
+      color: state.color,
+      thickness: state.thickness,
+    });
+  };
+
+  element.addEventListener("mousedown", handleMouseDown);
+
+  return down;
+}
 
 function attachTouchStart(element) {
   const touch = {
@@ -145,6 +177,30 @@ function attachTouchStart(element) {
   element.addEventListener("touchstart", handleTouchStart);
 
   return touch;
+}
+
+function attachMouseUp(element) {
+  const handleMouseUp = (event) => {
+    if (event.button !== 0) {
+      return;
+    }
+
+    console.log("up");
+    mouseDown.down = false;
+    const line = mouseDown.line;
+    if (line.points.length) {
+      line.addPoint({
+        xStart: currentPos.x,
+        yStart: currentPos.y,
+        xEnd: currentPos.x,
+        yEnd: currentPos.y,
+      });
+      line.drawLastPoint(ctx);
+      state = state.addToStack(line);
+    }
+  };
+
+  element.addEventListener("mouseup", handleMouseUp);
 }
 
 function attachTouchEnd(element) {
@@ -172,6 +228,34 @@ function attachTouchEnd(element) {
   element.addEventListener("touchend", handleTouchEnd);
 
   return touch;
+}
+
+function attachMouseMove(element) {
+  const handleMouseMove = (event) => {
+    if (!mouseDown?.down) {
+      return;
+    }
+
+    console.log("move");
+    const x = getOffsetX(event.clientX);
+    const y = getOffsetY(event.clientY);
+
+    const line = mouseDown.line;
+
+    line.addPoint({
+      xStart: currentPos.x,
+      yStart: currentPos.y,
+      xEnd: x,
+      yEnd: y,
+    });
+
+    line.drawLastPoint(ctx);
+
+    currentPos.x = x;
+    currentPos.y = y;
+  };
+
+  element.addEventListener("mousemove", handleMouseMove);
 }
 
 function attachTouchMove(element) {
