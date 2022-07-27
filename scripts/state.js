@@ -64,6 +64,15 @@ class State {
     });
   }
 
+  clearStacks() {
+    return new State({
+      stack: [],
+      color: this.color,
+      thickness: this.thickness,
+      redoStack: [],
+    });
+  }
+
   setColor(color) {
     return new State({
       stack: [...this.stack],

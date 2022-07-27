@@ -45,6 +45,7 @@ thicknessRange.addEventListener("change", (event) => {
 const clearButton = document.getElementById("clear");
 clearButton.addEventListener("click", () => {
   ctx.clearRect(0, 0, ctx_rect.width, ctx_rect.height);
+  state = state.clearStacks();
 });
 
 const undoButton = document.getElementById("undo");
