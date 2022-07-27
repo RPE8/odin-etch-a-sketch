@@ -20,7 +20,11 @@
             <input id="color" type="color" />
           </li>
           <li class="labeled-input">
-            <span>Thickness</span><input type="range" value="100" />
+            <span>Thickness</span>
+            <div class="thickness-range">
+              <span>1</span
+              ><input type="range" value="10" min="1" max="10" /><span>10</span>
+            </div>
           </li>
           <li><button id="undo" type="button">Undo</button></li>
           <li><button id="redo" type="button">Redo</button></li>
