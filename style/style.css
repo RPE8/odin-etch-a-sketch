@@ -6,7 +6,6 @@
 
 body {
   height: 100vh;
-  width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -15,8 +14,7 @@ body {
 }
 
 header {
-  max-height: 40px;
-  min-height: 40px;
+  height: 40px;
 }
 
 main {
@@ -42,8 +40,19 @@ canvas {
   justify-content: space-between;
 }
 
+#tools-menu > li {
+  display: flex;
+  justify-content: center;
+  height: 35px;
+}
+
 #tools-menu button,
 #tools-menu input {
+  height: 100%;
+  width: 45px;
+}
+
+#thickness-range-item #range {
   width: 100%;
 }
 
@@ -51,18 +60,6 @@ canvas {
   flex-direction: column;
   align-items: center;
   flex-basis: 100%;
-}
-
-#tools-menu > li {
-  display: flex;
-  justify-content: center;
-  height: 35px;
-}
-
-#tools-menu > li > input,
-#tools-menu > li > button {
-  height: 100%;
-  width: 45px;
 }
 
 .thickness-range {
