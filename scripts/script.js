@@ -28,7 +28,7 @@ function getOffsetY(y) {
 
 const colorButton = document.getElementById("color");
 colorButton.setAttribute("value", state.color);
-document.getElementById("color").addEventListener("change", (event) => {
+colorButton.addEventListener("change", (event) => {
   const selectedColor = event.target.value;
   colorButton.setAttribute("value", selectedColor);
   state = state.setColor(selectedColor);
@@ -37,7 +37,7 @@ document.getElementById("color").addEventListener("change", (event) => {
 const thicknessRange = document.getElementById("range");
 thicknessRange.setAttribute("value", state.thickness);
 thicknessRange.addEventListener("change", (event) => {
-  const selectedTchickness = +event.target.value;
+  const selectedTchickness = Number(event.target.value);
   thicknessRange.setAttribute("value", selectedTchickness);
   state = state.setThickness(selectedTchickness);
 });
