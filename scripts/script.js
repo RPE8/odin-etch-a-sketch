@@ -3,8 +3,6 @@ import State from "./state.js";
 
 const canvasContainer = document.getElementById("canvas-container");
 const canvas = document.createElement("canvas");
-canvas.height = canvasContainer.offsetHeight;
-canvas.width = canvasContainer.offsetWidth;
 canvasContainer.appendChild(canvas);
 
 const ctx = canvas.getContext("2d");
@@ -36,6 +34,19 @@ function debounce(fn, time) {
     }, time);
   };
 }
+
+const canvasObserver = new ResizeObserver(
+  debounce((entries) => {
+    const { contentRect } = entries[0];
+    // Without - 5 container will grow infinitly, probably, because of 'vh' in it's height
+    canvas.height = contentRect.height - 5;
+    canvas.width = contentRect.width;
+  }),
+  100
+);
+
+// Observe one or multiple elements
+canvasObserver.observe(canvasContainer);
 
 window.addEventListener(
   "scroll",
