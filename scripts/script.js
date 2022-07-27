@@ -53,6 +53,7 @@ const canvasObserver = new ResizeObserver(
     // Without - 5 container will grow infinitly, probably, because of 'vh' in it's height
     canvas.height = contentRect.height - 5;
     canvas.width = contentRect.width;
+    updateCanvasOffsets();
     state.stack.forEach((action) => {
       action.draw(ctx);
     });
@@ -65,7 +66,7 @@ canvasObserver.observe(canvasContainer);
 window.addEventListener(
   "scroll",
   debounce(() => {
-    ctx_rect = canvas.getBoundingClientRect();
+    updateCanvasOffsets();
   }, 100)
 );
 
@@ -87,14 +88,14 @@ thicknessRange.addEventListener("change", (event) => {
 
 const clearButton = document.getElementById("clear");
 clearButton.addEventListener("click", () => {
-  ctx.clearRect(0, 0, ctx_rect.width, ctx_rect.height);
+  clearCanvas();
   state = state.clearStacks();
 });
 
 const undoButton = document.getElementById("undo");
 undoButton.addEventListener("click", () => {
   state = state.moveLastActionFromStackToRedoStack();
-  ctx.clearRect(0, 0, ctx_rect.width, ctx_rect.height);
+  clearCanvas();
   state.stack.forEach((action) => {
     action.draw(ctx);
   });
@@ -103,11 +104,19 @@ undoButton.addEventListener("click", () => {
 const redoButton = document.getElementById("redo");
 redoButton.addEventListener("click", () => {
   state = state.moveLastActionFromRedoStackToStack();
-  ctx.clearRect(0, 0, ctx_rect.width, ctx_rect.height);
+  clearCanvas();
   state.stack.forEach((action) => {
     action.draw(ctx);
   });
 });
+
+function clearCanvas() {
+  ctx.clearRect(0, 0, ctx_rect.width, ctx_rect.height);
+}
+
+function updateCanvasOffsets() {
+  ctx_rect = canvas.getBoundingClientRect();
+}
 
 const startTouch = attachTouchStart(canvas);
 attachTouchEnd(canvas);
